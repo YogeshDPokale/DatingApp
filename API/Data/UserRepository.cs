@@ -1,14 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.DTOs;
 using API.Entities;
 using API.Interfaces;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
-using SQLitePCL;
+
+/* 
+A Repository mediates between the domain and data mapping layers, acting like an in-memory domain object collection.
+Web Server => Controller => Repository =>Dbcontext => Database.
+*/
 
 namespace API.Data
 {

@@ -37,7 +37,7 @@ app.UseHttpsRedirection();
 
 // app.UseAuthorization();
 // CORS Adding angular URL to API
-app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200", "https://localhost:53559"));
+app.UseCors(builder => builder.AllowAnyHeader().AllowAnyMethod().WithOrigins("https://localhost:4200"));
 
 
 app.UseAuthentication();
