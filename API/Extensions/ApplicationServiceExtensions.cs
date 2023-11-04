@@ -1,29 +1,25 @@
 using API.Data;
+using API.Helpers;
 using API.Interfaces;
 using API.Services;
+using API.SignalR;
 using Microsoft.EntityFrameworkCore;
 
-namespace API.Extensions
+namespace API.Extensions;
+
+public static class ApplicationServiceExtensions
 {
-    public static class ApplicationServiceExtensions
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services, IConfiguration config)
     {
-        public static IServiceCollection AdApplicationServices(this IServiceCollection services, IConfiguration config)
-        {
-            // Connection String
-            services.AddDbContext<DataContext>(opt =>
-            {
-                //Getting the connection string from the appSetting.json
-                opt.UseSqlite(config.GetConnectionString("DefaultConnection"));
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.Configure<CloudinarySetting>(config.GetSection("CloudinarySettings"));
+        services.AddScoped<IPhotoService, PhotoService>();
+        services.AddScoped<LogUserActivity>();
+        services.AddSignalR();
+        services.AddSingleton<PresenceTracker>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>();
 
-            });
-
-
-            services.AddCors();
-            services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IUserRepository, UserRepository>();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
-            return services;
-        }
+        return services;
     }
 }
