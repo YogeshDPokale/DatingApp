@@ -31,6 +31,7 @@ import { ConfirmDialogComponent } from './modals/confirm-dialog/confirm-dialog.c
 import { ErrorInterceptor } from './_intercepters/error.interceptor';
 import { JwtInterceptor } from './_intercepters/jwt.interceptor';
 import { LoadingInterceptor } from './_intercepters/loading.interceptor';
+import { UserTrackingComponent } from './user-tracking/user-tracking.component';
 
 @NgModule({
   declarations: [
@@ -54,6 +55,7 @@ import { LoadingInterceptor } from './_intercepters/loading.interceptor';
     PhotoManagementComponent,
     RolesModalComponent,
     ConfirmDialogComponent,
+    UserTrackingComponent,
   ],
   imports: [
     BrowserModule,
