@@ -1,0 +1,15 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <app-age-bar-chart [receivedData]="barChartData" (sendToDashboard)="updatePieChart($event)"></app-age-bar-chart>
+    </div>
+    <div class="col-md-6">
+      <div class="pie-chart-container">
+        <app-sex-pie-chart [receivedData]="pieChartData"></app-sex-pie-chart>
+      </div>
+      <div class="pie-chart-container">
+        <app-relation-status-pie-chart [receivedData]="pieChartData"></app-relation-status-pie-chart>
+      </div>
+    </div>
+  </div>
+</div>

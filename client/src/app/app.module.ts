@@ -32,6 +32,10 @@ import { ErrorInterceptor } from './_intercepters/error.interceptor';
 import { JwtInterceptor } from './_intercepters/jwt.interceptor';
 import { LoadingInterceptor } from './_intercepters/loading.interceptor';
 import { UserTrackingComponent } from './user-tracking/user-tracking.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { AgeBarChartComponent } from './charts/age-bar-chart/age-bar-chart.component';
+import { SexPieChartComponent } from './charts/sex-pie-chart/sex-pie-chart.component';
+import { RelationStatusPieChartComponent } from './charts/relation-status-pie-chart/relation-status-pie-chart.component';
 
 @NgModule({
   declarations: [
@@ -56,6 +60,10 @@ import { UserTrackingComponent } from './user-tracking/user-tracking.component';
     RolesModalComponent,
     ConfirmDialogComponent,
     UserTrackingComponent,
+    DashboardComponent,
+    AgeBarChartComponent,
+    SexPieChartComponent,
+    RelationStatusPieChartComponent,
   ],
   imports: [
     BrowserModule,

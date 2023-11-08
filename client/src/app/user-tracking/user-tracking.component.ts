@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import * as ApexCharts from 'apexcharts';
+import ApexCharts from 'apexcharts';
 import { AccountService } from '../_services/account.service';
 import { UserActivity } from '../_models/userActivity';
 @Component({

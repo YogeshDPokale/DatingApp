@@ -15,6 +15,7 @@ import { memberDetailedResolver } from './_resolvers/member-detailed.resolver';
 import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { adminGuard } from './_guards/admin.guard';
 import { UserTrackingComponent } from './user-tracking/user-tracking.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -23,14 +24,15 @@ const routes: Routes = [
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
     children: [
-      { path: 'members', component: MemberListComponent},
-      { path: 'members/:username', component: MemberDetailComponent,resolve : [memberDetailedResolver] },
-      { path: 'member/edit', component: MemberEditComponent , canDeactivate:[preventUnsavedChangesGuard] },
-      { path: 'user-tracking', component: UserTrackingComponent},
+      { path: 'members', component: MemberListComponent },
+      { path: 'members/:username', component: MemberDetailComponent, resolve: [memberDetailedResolver] },
+      { path: 'member/edit', component: MemberEditComponent, canDeactivate: [preventUnsavedChangesGuard] },
+      { path: 'user-tracking', component: UserTrackingComponent },
 
       { path: 'lists', component: ListsComponent },
       { path: 'messages', component: MessagesComponent },
       { path: 'admin', component: AdminPanelComponent, canActivate: [adminGuard] },
+      { path: 'dashboard', component: DashboardComponent, canActivate: [adminGuard] },
 
     ]
   },
@@ -38,7 +40,7 @@ const routes: Routes = [
   { path: 'not-found', component: NotFoundComponent },
   { path: 'server-error', component: ServerErrorComponent },
 
-  
+
   { path: '**', component: NotFoundComponent, pathMatch: 'full' },
 
 ];
