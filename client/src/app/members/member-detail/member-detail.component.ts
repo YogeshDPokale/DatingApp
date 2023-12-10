@@ -12,6 +12,8 @@ import { AccountService } from 'src/app/_services/account.service';
 import { User } from 'src/app/_models/user';
 import { take } from 'rxjs';
 import { MessagesService } from 'src/app/_services/messages.service';
+import { MembersService } from 'src/app/_services/members.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-member-detail',
@@ -28,7 +30,7 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
   messages: Message[] = [];
   user?: User;
 
-  constructor(public presenceService: PresenceService, private route: ActivatedRoute,
+  constructor(private memberService: MembersService, private toastr: ToastrService, public presenceService: PresenceService, private route: ActivatedRoute,
     private messageService: MessagesService, private accountService: AccountService) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
       next: user => {
@@ -87,6 +89,32 @@ export class MemberDetailComponent implements OnInit, OnDestroy {
     for (const photo of this.member?.photos) {
       this.images.push(new ImageItem({ src: photo.url, thumb: photo.url }));
     }
+  }
+
+  ToggleLike(member: Member) {
+    if (member.liked) {
+      this.removeLike(member)
+    }
+    else {
+      this.addLike(member)
+    }
+  }
+
+  addLike(member: Member) {
+    this.memberService.addLike(member.userName).subscribe({
+      next: () => {
+        // this.toastr.success('You have liked ' + member.knownAs)
+        this.member.liked = true;
+      }
+    })
+  }
+  removeLike(member: Member) {
+    this.memberService.removeLike(member.userName).subscribe({
+      next: () => {
+        // this.toastr.success('you have removed like of ' + member.knownAs)
+        this.member.liked = false;
+      }
+    })
   }
 
 }

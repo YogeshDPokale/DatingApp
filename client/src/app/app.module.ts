@@ -36,6 +36,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { AgeBarChartComponent } from './charts/age-bar-chart/age-bar-chart.component';
 import { SexPieChartComponent } from './charts/sex-pie-chart/sex-pie-chart.component';
 import { RelationStatusPieChartComponent } from './charts/relation-status-pie-chart/relation-status-pie-chart.component';
+import { LoginComponent } from './login/login.component';
+import { AboutComponent } from './about/about.component';
 
 @NgModule({
   declarations: [
@@ -64,6 +66,8 @@ import { RelationStatusPieChartComponent } from './charts/relation-status-pie-ch
     AgeBarChartComponent,
     SexPieChartComponent,
     RelationStatusPieChartComponent,
+    LoginComponent,
+    AboutComponent,
   ],
   imports: [
     BrowserModule,

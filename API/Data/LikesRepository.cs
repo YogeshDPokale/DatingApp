@@ -61,6 +61,13 @@ namespace API.Data
                 .Include(x => x.LikedUsers)
                 .FirstOrDefaultAsync(x => x.Id == userId);
         }
+        public void DeleteLikedUsers(int userId)
+        {
+            var likedByUser = _context.Likes.Where(like => like.SourceUserId == userId || like.TargetUserId == userId);
+            _context.Likes.RemoveRange(likedByUser);
+        }
+       
+
     }
 
 }

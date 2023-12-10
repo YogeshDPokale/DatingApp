@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import ApexCharts from 'apexcharts';
 import { Data } from 'src/app/_models/datingData';
 @Component({
@@ -7,8 +7,10 @@ import { Data } from 'src/app/_models/datingData';
   styleUrls: ['./relation-status-pie-chart.component.css']
 })
 export class RelationStatusPieChartComponent implements OnInit {
-  data: Data;
   @Input() receivedData: Data;
+  @Output() sendStatusPieToDashboard: EventEmitter<string> = new EventEmitter();
+
+  data: Data;
   chartObj: ApexCharts;
   isLoaded: boolean = false;
   ngOnInit(): void {
@@ -44,12 +46,19 @@ export class RelationStatusPieChartComponent implements OnInit {
   }
   showChart(relationshipStatusData: number[]) {
 
+    const that = this;
 
     const options: ApexCharts.ApexOptions = {
       series: relationshipStatusData,
       chart: {
         type: "pie",
-        height: '300'
+        height: '300',
+        events: {
+          dataPointSelection: function (event, chartContext, config) {
+            that.sendStatusPieToDashboard.emit(['seeing someone', 'single', 'married', 'available'][config.dataPointIndex])
+            // console.log(["Seeing Someone", "Single", "Married", "Available"][config.dataPointIndex]);
+          },
+        },
       },
       title: {
         text: 'Relation status',

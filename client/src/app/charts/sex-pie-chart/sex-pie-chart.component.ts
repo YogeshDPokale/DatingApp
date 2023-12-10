@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import ApexCharts from 'apexcharts';
 import { Data } from 'src/app/_models/datingData';
 @Component({
@@ -7,6 +7,7 @@ import { Data } from 'src/app/_models/datingData';
   styleUrls: ['./sex-pie-chart.component.css']
 })
 export class SexPieChartComponent implements OnInit {
+  @Output() sendSexPieToDashboard: EventEmitter<string> = new EventEmitter();
 
 
   data: Data;
@@ -17,7 +18,7 @@ export class SexPieChartComponent implements OnInit {
   ngOnInit(): void {
     this.chart(this.receivedData);
   }
-  chart(Rdata:Data) {
+  chart(Rdata: Data) {
     const data = Object.values(Rdata);
 
     // Initialize variables to count the gender categories
@@ -39,13 +40,22 @@ export class SexPieChartComponent implements OnInit {
   }
 
   showChart(genderData: number[]) {
+    const that = this;
+
     const options: ApexCharts.ApexOptions = {
       series: genderData,
       chart: {
         type: "pie",
-        height: '300'
+        height: '300',
+        events: {
+          dataPointSelection: function (event, chartContext, config) {
+            that.sendSexPieToDashboard.emit(["Male", "Female"][config.dataPointIndex])
+            // console.log(["Male", "Female"][config.dataPointIndex]);
+          },
+        },
 
       },
+
       title: {
         text: 'Sex Info',
       },

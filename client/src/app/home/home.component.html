@@ -1,10 +1,13 @@
-<div class="container mt-5">
-    <div *ngIf="!registerMode" style="text-align: center;">
-        <h1>Find your match</h1>
+<div class="container mt-3">
+    <div *ngIf="!registerMode && !loginMode" style="text-align: center;">
+        <h3>Find your match</h3>
+        <h3>Only on</h3>
+        <h2 class="text-danger">Heart To Heart</h2>
         <p class="lead">Come on in to view your matches... all you need to do is sign up!</p>
         <div class="text-center">
+            <button (click)="loginToggle()" class="btn btn-success btn-lg me-2"> Login</button>
             <button (click)="registerToggle()" class="btn btn-primary btn-lg me-2"> Register</button>
-            <button class="btn btn-primary btn-info btn-lg">Learn more</button>
+            <button class="btn btn-primary btn-info btn-lg" routerLink="/about" >Learn more</button>
         </div>
     </div>
 
@@ -13,6 +16,13 @@
             <div class="col-4">
                 <app-register (cancelRegister)="cancelRegisterMode($event)"></app-register>
 
+            </div>
+        </div>
+    </div>
+    <div *ngIf="loginMode" class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <app-login (cancelLogin)="cancelLoginMode($event)"></app-login>
             </div>
         </div>
     </div>

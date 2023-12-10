@@ -7,16 +7,17 @@ import { Data } from 'src/app/_models/datingData';
   styleUrls: ['./age-bar-chart.component.css']
 })
 export class AgeBarChartComponent implements OnInit {
-  @Output() sendToDashboard: EventEmitter<{ x: string, y: number }> = new EventEmitter();
+  @Output() sendBarToDashboard: EventEmitter<{ x: string, y: number }> = new EventEmitter();
   @Input() receivedData: Data;
   data: Data;
+  isLoaded: boolean = false;
+  chartObj: ApexCharts;
   ngOnInit() {
+    this.chart(this.receivedData);
+  }
 
-
-    // console.log('JSON data:', jso nData);
-    // console.log(jsonData.slice(0, 5));
-
-    const data = Object.values(this.receivedData);
+  chart(Edata: Data) {
+    const data = Object.values(Edata);
 
     const ageRanges = [
       { min: 18, max: 20 },
@@ -58,8 +59,6 @@ export class AgeBarChartComponent implements OnInit {
     console.log(ageRangeData)
     this.showChart(ageRangeData)
   }
-
-
   showChart(chartdata: { x: string; y: number }[]) {
     const that = this;
     const options: ApexCharts.ApexOptions = {
@@ -69,7 +68,7 @@ export class AgeBarChartComponent implements OnInit {
 
         events: {
           click(event, chartContext, config) {
-            that.sendToDashboard.emit(config.config.series[config.seriesIndex].data[config.dataPointIndex])
+            that.sendBarToDashboard.emit(config.config.series[config.seriesIndex].data[config.dataPointIndex])
           },
         },
       },
@@ -115,8 +114,20 @@ export class AgeBarChartComponent implements OnInit {
 
     };
 
-    const barChart = new ApexCharts(document.querySelector("#barChart"), options);
-    console.log(barChart.render())
+    if (!this.isLoaded) {
+      this.chartObj = new ApexCharts(document.querySelector("#barChart"), options);
+      this.chartObj.render();
+      this.isLoaded = true;
+      console.log(chartdata)
 
+    }
+    else {
+      this.chartObj.destroy();
+      this.chartObj = new ApexCharts(document.querySelector("#barChart"), options);
+
+      this.chartObj.render();
+      console.log(chartdata)
+      // console.log(this.isLoaded)
+    }
   }
 }

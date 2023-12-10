@@ -1,0 +1,23 @@
+<form #loginFrom="ngForm" (ngSubmit)="login()" autocomplete="off">
+
+    <h2 class="text-center text-primary">Login</h2>
+    <hr>
+
+    <div class="row mb-3">
+        <div class="col-md-6 mb-3">
+            <label for="username">Username</label>
+            <input name="username" [(ngModel)]="model.username" class="form-control me-2" type="text"
+                placeholder="Username">
+        </div>
+        <div class="col-md-6 mb-3">
+            <label for="password">Password</label>
+            <input name="password" [(ngModel)]="model.password" class="form-control me-2" type="password"
+                placeholder="Password">
+        </div>
+    </div>
+    <div class="text-center">
+        <button class="btn btn-success me-2" type="submit">Login</button>
+        <button class="btn btn-default" (click)="cancel()" type="submit">Cancel</button>
+    </div>
+
+</form>

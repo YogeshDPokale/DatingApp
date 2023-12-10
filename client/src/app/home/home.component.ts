@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-
+  loginMode: boolean = false;
   registerMode = false;
   users: any;
   constructor(private http: HttpClient) {
@@ -19,6 +19,11 @@ export class HomeComponent implements OnInit {
 
   registerToggle() {
     this.registerMode = !this.registerMode;
+    this.loginMode = false;
+  }
+  loginToggle() {
+    this.loginMode = !this.loginMode;
+    this.registerMode = false;
   }
 
   // getUsers() {
@@ -32,5 +37,9 @@ export class HomeComponent implements OnInit {
 
   cancelRegisterMode(event: boolean) {
     this.registerMode = event;
+  }
+  cancelLoginMode(event: boolean) {
+    this.loginMode = event;
+
   }
 }

@@ -27,28 +27,40 @@ public class UserRepository : IUserRepository
             .SingleOrDefaultAsync();
     }
 
-    public async Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams)
+   public async Task<PagedList<MemberDto>> GetMembersAsync(UserParams userParams, int currentUserId)
+{
+    var query = _context.Users.AsQueryable();
+
+    query = query.Where(u => u.UserName != userParams.CurrentUsername);
+    query = query.Where(u => u.Gender == userParams.Gender);
+
+    var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MaxAge - 1));
+    var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MinAge));
+
+    query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
+
+    query = userParams.OrderBy switch
     {
-        var query = _context.Users.AsQueryable();
+        "created" => query.OrderByDescending(u => u.Created),
+        _ => query.OrderByDescending(u => u.LastActive)
+    };
 
-        query = query.Where(u => u.UserName != userParams.CurrentUsername);
-        query = query.Where(u => u.Gender == userParams.Gender);
+    var members = await PagedList<MemberDto>.CreateAsync(query.AsNoTracking()
+        .ProjectTo<MemberDto>(_mapper.ConfigurationProvider),
+        userParams.PageNumber, userParams.PageSize);
 
-        var minDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MaxAge - 1));
-        var maxDob = DateOnly.FromDateTime(DateTime.Today.AddYears(-userParams.MinAge));
-
-        query = query.Where(u => u.DateOfBirth >= minDob && u.DateOfBirth <= maxDob);
-
-        query = userParams.OrderBy switch
-        {
-            "created" => query.OrderByDescending(u => u.Created),
-            _ => query.OrderByDescending(u => u.LastActive)
-        };
-
-        return await PagedList<MemberDto>.CreateAsync(query.AsNoTracking()
-            .ProjectTo<MemberDto>(_mapper.ConfigurationProvider),
-                userParams.PageNumber, userParams.PageSize);
+    foreach (var memberDto in members)
+    {
+        memberDto.Liked = await UserLikes(currentUserId, memberDto.Id);
     }
+
+    return members;
+}
+    public async Task<bool> UserLikes(int sourceUserId, int targetUserId)
+    {
+        return await _context.Likes.AnyAsync(l => l.SourceUserId == sourceUserId && l.TargetUserId == targetUserId);
+    }
+
 
     public async Task<AppUser> GetUserByIdAsync(int id)
     {

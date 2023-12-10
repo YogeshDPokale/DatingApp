@@ -29,16 +29,16 @@ export class NavComponent {
 
   //   })
   // }
-  login() {
-    this.accountServices.login(this.model).subscribe({
-      next: () => this.router.navigateByUrl('/members'),
-      // error: error => this.toastr.error(error.error)
-      })
+  // login() {
+  //   this.accountServices.login(this.model).subscribe({
+  //     next: () => this.router.navigateByUrl('/members'),
+  //     // error: error => this.toastr.error(error.error)
+  //     })
 
-  }
+  // }
   logout() {
     this.accountServices.logout();
-    this.router.navigateByUrl('/')
+    this.router.navigateByUrl('/register')
   }
 }
 

@@ -16,14 +16,18 @@ import { AdminPanelComponent } from './admin/admin-panel/admin-panel.component';
 import { adminGuard } from './_guards/admin.guard';
 import { UserTrackingComponent } from './user-tracking/user-tracking.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { registerRoutepreventGuard } from './_guards/register-routeprevent.guard';
+import { AboutComponent } from './about/about.component';
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: 'register', component: HomeComponent, canActivate: [registerRoutepreventGuard]  },
+  { path: 'about', component: AboutComponent },
   {
     path: '',
     runGuardsAndResolvers: 'always',
     canActivate: [authGuard],
     children: [
+      { path: '', component: MemberListComponent },
       { path: 'members', component: MemberListComponent },
       { path: 'members/:username', component: MemberDetailComponent, resolve: [memberDetailedResolver] },
       { path: 'member/edit', component: MemberEditComponent, canDeactivate: [preventUnsavedChangesGuard] },

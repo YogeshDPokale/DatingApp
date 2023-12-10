@@ -1,11 +1,16 @@
 <div class="row">
-    <div class="col-4">
-        <div class="card">
-            <img src="{{member.photoUrl || './assets/user.png'}}" alt="{{member.knownAs}}"
-                class="card-img-top img-thumbnail">
+    <div class="col-md-4">
+        <div class="card border-primary bg-transparent text-dark">
+            <img [src]="member.photoUrl || './assets/user.png'" [alt]="member.knownAs"
+                class="card-img-top img-thumbnail img-fluid">
             <div class="card-body">
                 <div class="mb-2" *ngIf="(presenceService.onlineUsers$ | async)?.includes(member.userName)">
-                    <i class="fa fa-user-circle text-success"></i> Online now
+                    <i class="fa fa-user-circle text-success"></i> Online 
+                </div>
+                <div *ngIf="!(presenceService.onlineUsers$ | async)?.includes(member.userName)">
+                    <strong>Last active:</strong>
+                    <p *ngIf="member.lastActive">{{member.lastActive | timeago}}
+                    </p>
                 </div>
                 <div>
                     <strong>Location:</strong>
@@ -15,26 +20,27 @@
                     <strong>Age:</strong>
                     <p>{{member.age}}</p>
                 </div>
-                <div>
+                <!-- <div *ngIf="(presenceService.onlineUsers$ | async)?.includes(member.userName)">
                     <strong>Last active:</strong>
-                    <p>{{member.lastActive | timeago}}</p>
-                </div>
+                    <p><i class="fa fa-user-circle text-success"></i> Online</p>
+                </div> -->
                 <div>
                     <strong>Member since:</strong>
                     <p>{{member.created | date:'dd MMM yyyy'}}</p>
                 </div>
             </div>
-            <div class="card-footer">
-                <div class="btn-group d-flex">
-                    <button class="btn btn-primary">Like</button>
+            <div class="card-footer border-primary bg-transparent text-dark">
+                <div class="btn-group d-flex ">
+                    <button #bt1 *ngIf="member.liked" class="btn btn-white border" [ngClass]="{'btn-danger': member.liked}" (click)="ToggleLike(member)">Liked</button>
+                    <button *ngIf="!(member.liked)" class="btn btn-white border border-primary" [ngClass]="{'btn-danger': member.liked}" (click)="ToggleLike(member)">Like</button>
                     <button (click)="selectTab('Messages')" class="btn btn-success">Message</button>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-8">
-        <tabset class="member-tabset" #memberTabs>
-            <tab heading="About {{member.knownAs}}" (selectTab)="onTabActivated($event)">
+    <div class="col-md-8 " style="background-color: rgba(0, 0, 0, 0);">
+        <tabset class="member-tabset" #memberTabs >
+            <tab heading="About {{member.knownAs}}" (selectTab)="onTabActivated($event)" style="background-color: rgba(0, 0, 0, 0);">
                 <h4>Description</h4>
                 <p>{{member.introduction}}</p>
                 <h4>Looking for</h4>
@@ -45,7 +51,7 @@
                 <p>{{member.interests}}</p>
             </tab>
             <tab heading="Photos" #photoTab="tab" (selectTab)="onTabActivated($event)">
-                <gallery *ngIf="photoTab.active" [items]="images" class="gallery"></gallery>
+                <gallery *ngIf="photoTab.active" [items]="images" class="gallery img-fluid"></gallery>
             </tab>
             <tab heading="Messages" (selectTab)="onTabActivated($event)">
                 <app-member-messages [username]="member.userName"></app-member-messages>

@@ -31,7 +31,7 @@ namespace API.DTOs
         public string Country { get; set; }
 
         public List<PhotoDto> Photos { get; set; } = new();
-
+        public object Liked { get; internal set; }
     }
 
     public class PhotoDto
