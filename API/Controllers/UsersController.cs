@@ -18,9 +18,11 @@ public class UsersController : BaseApiController
     private readonly IUnitOfWork _uow;
     private readonly IMapper _mapper;
     private readonly IPhotoService _photoService;
+    public SendToFastAPI _SendToFastApi;
 
-    public UsersController(IUnitOfWork uow, IMapper mapper, IPhotoService photoService)
+    public UsersController(IUnitOfWork uow, IMapper mapper, IPhotoService photoService, SendToFastAPI SendToFastApi)
     {
+        _SendToFastApi = SendToFastApi;
         _photoService = photoService;
         _uow = uow;
         _mapper = mapper;
@@ -31,17 +33,39 @@ public class UsersController : BaseApiController
     {
         var currentUser = await _uow.UserRepository.GetUserByUsernameAsync(User.GetUsername());
         var currentUserId = currentUser.Id;
+        var (currentUserToSend, otherUsers) = await _uow.UserRepository.GetUsersToSendAsync(currentUserId);
+
+        var recommendedUsers= await _SendToFastApi.SendPostRequestAsync(currentUserToSend, otherUsers);
+        
+        foreach (int userId in recommendedUsers)
+        {
+        }
         userParams.CurrentUsername = currentUser.UserName;
 
         if (string.IsNullOrEmpty(userParams.Gender))
             userParams.Gender = currentUser.Gender == "male" ? "female" : "male";
 
-        var users = await _uow.UserRepository.GetMembersAsync(userParams, currentUserId);
+            
+        if (recommendedUsers.Count > 0){
+            Console.WriteLine($"\nrecommendedUsers.Count \n is \n greater \n than zero \n");
 
-        Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize,
-            users.TotalCount, users.TotalPages));
+            var users = await _uow.UserRepository.GetMembersWithProcessedListAsync(userParams, currentUserId,recommendedUsers);
+            Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize,
+           users.TotalCount, users.TotalPages));
+            return Ok(users);
+        }
+        else{
 
+            var users = await _uow.UserRepository.GetMembersAsync(userParams, currentUserId);
+            Response.AddPaginationHeader(new PaginationHeader(users.CurrentPage, users.PageSize,
+           users.TotalCount, users.TotalPages));
         return Ok(users);
+        }
+
+
+       
+
+
     }
 
     [HttpGet("{username}")]

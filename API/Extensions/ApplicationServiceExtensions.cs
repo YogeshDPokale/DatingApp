@@ -19,6 +19,8 @@ public static class ApplicationServiceExtensions
         services.AddSignalR();
         services.AddSingleton<PresenceTracker>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+        services.AddTransient<SendToFastAPI>();
+
 
         return services;
     }

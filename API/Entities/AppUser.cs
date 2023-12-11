@@ -9,6 +9,8 @@ public class AppUser : IdentityUser<int>
 {// [Required] way to add validation to Username and password
     public DateOnly DateOfBirth { get; set; }
     public string KnownAs { get; set; }
+    // public string MyProperty { get; set; }
+    // public string orientation { get; set; }
     public DateTime Created { get; set; } = DateTime.UtcNow;
     public DateTime LastActive { get; set; } = DateTime.UtcNow;
     public string Gender { get; set; }
@@ -25,11 +27,11 @@ public class AppUser : IdentityUser<int>
     public ICollection<AppUserRole> UserRoles { get; set; }
 
 
-    // public int GetAge()
-    // {
-    //     return DateOfBirth.CalculateAge();
+    public int GetAge()
+    {
+        return DateOfBirth.CalculateAge();
 
-    // }
+    }
 }
 
 [Table("Photos")]
